@@ -1,0 +1,184 @@
+<nav class="navbar navbar-expand-lg navbar-green bg-green">
+  <a class="navbar-brand" style="color:red;"></a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="row">
+    <div id="hotel_map"></div>
+  </div>
+  <div class="collapse navbar-collapse" id="navbarColor02">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a (click)="onOpenModal1('add')" class="nav-link" >
+          <img src="assets/AddLog.jpg" class="img-fluid rounded-circle w-20" style="max-height:40px" alt="Add Area">
+          <span class="sr-only">(current)</span>
+        </a>
+      </li>
+    </ul>
+
+    <form class="form-inline my-2 my-lg-0">
+      <input type="search" (ngModelChange)="searchGreenAreas(key.value)"  #key="ngModel" ngModel
+             name="key" id="searchName" class="form-control mr-sm-2" placeholder="Search areas..." required>
+    </form>
+  </div>
+</nav>
+<div class="container" id="main-container">
+  <div class="row">
+    <div *ngFor="let greenArea of greenAreas" class="col-md-6 col-xl-3">
+      <div class="card m-b-30">
+        <div class="card-body row">
+          <div class="col-6">
+            <img src="assets/GreenLog.jpeg" class="img-fluid  rounded-circle w-80">
+          </div>
+        </div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item"><i></i>Representant : {{greenArea?.repName}}</li>
+          <li class="list-group-item"><i></i>Address : {{greenArea?.adress}}</li>
+          <li class="list-group-item"><i></i>Type : {{greenArea?.type}}</li>
+
+        </ul>
+        <div class="card-body">
+          <div class="float-right btn-group btn-group-sm">
+
+            <a (click)="onOpenModal(greenArea, 'edit')" class="btn btn-primary tooltips" data-placement="top" data-toggle="tooltip" data-original-title="Edit"><i class="fa fa-pencil"></i></a>
+            <a (click)="onOpenModal(greenArea, 'delete')" class="btn btn-secondary tooltips" data-placement="top" data-toggle="tooltip" data-original-title="Delete" ><i class="fa fa-times"></i></a>
+          </div>
+          <ul class="social-links list-inline mb-0">
+            <li class="list-inline-item"></li>
+            <li class="list-inline-item"></li>
+            <li class="list-inline-item"></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+</div>
+
+<!-- Add Member Modal -->
+<div class="modal fade" id="addGreenAreaModal" tabindex="-1" role="dialog" aria-labelledby="addGreenAreaModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addGreenAreaModalLabel">Add Green area</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form #addForm="ngForm" (ngSubmit)="onAddGreenArea(addForm)">
+          <div class="form-group">
+            <label for="repName">Representative name</label>
+            <input type="text" ngModel name="repName" class="form-control" id="repName" placeholder="" required>
+          </div>
+
+          <div class="form-group">
+            <label for="repName">Address</label>
+            <input type="text" ngModel name="adress" class="form-control" id="adress" placeholder="" required>
+          </div>
+
+          <div class="form-group">
+            <label for="type">Type</label>
+            <input type="text" ngModel name="type" class="form-control" id="type" placeholder="" required>
+          </div>
+
+          <div class="form-group">
+            <label for="lat">Latitude</label>
+            <input type="number" ngModel name="lat" class="form-control" id="lat" placeholder="" required>
+          </div>
+
+          <div class="form-group">
+            <label for="lng">longitude</label>
+            <input type="number" ngModel name="lng" class="form-control" id="lng" placeholder="" required>
+          </div>
+
+
+
+          <div class="modal-footer">
+            <button type="button" id="add-greenArea-form" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button [disabled]="addForm.invalid" type="submit" class="btn btn-primary" >Save changes</button>
+          </div>
+
+
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Modal -->
+<div class="modal fade" id="updateGreenAreaModal" tabindex="-1" role="dialog" aria-labelledby="updateMemberModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="updateGreenAreaModalLabel">Edit Area {{editGreenArea?.repName}}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form #editForm="ngForm">
+          <div class="form-group">
+            <label for="repName">Edit representative name</label>
+            <input type="text" ngModel="{{editGreenArea?.repName}}" name="repName" class="form-control" id="type" aria-describedby="emailHelp" placeholder="repName">
+          </div>
+          <input type="hidden" ngModel="{{editGreenArea?.id}}" name="id" class="form-control" id="id" placeholder="Email">
+          <input type="hidden" ngModel="{{editGreenArea?.areaCode}}" name="areaCode" class="form-control" id="areaCode" placeholder="Email">
+          <div class="form-group">
+            <label for="repName">Edit Type</label>
+            <input type="text" ngModel="{{editGreenArea?.type}}" name="type" class="form-control" id="type" aria-describedby="emailHelp" placeholder="Type">
+          </div>
+          <div class="form-group">
+            <label for="repName">Edit Address</label>
+            <input type="text" ngModel="{{editGreenArea?.adress}}" name="adress" class="form-control" id="adress" aria-describedby="emailHelp" placeholder="adress">
+          </div>
+
+          <div class="form-group">
+            <label for="latitude">Edit Latitude</label>
+            <input type="number" ngModel="{{editGreenArea?.lat}}" name="lat" class="form-control" id="lat"  placeholder="latitude">
+          </div>
+
+          <div class="form-group">
+            <label for="longitude">Edit Longitude</label>
+            <input type="number" ngModel="{{editGreenArea?.lng}}" name="lng" class="form-control" id="lng"  placeholder="longitude">
+          </div>
+          <div class="modal-footer">
+            <button type="button" id="" data-dismiss="modal" class="btn btn-secondary">Close</button>
+            <button (click)="onUpdateGreenArea(editForm.value)" data-dismiss="modal" class="btn btn-primary" >Save changes</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Modal -->
+<div class="modal fade" id="deleteGreenAreaModal" tabindex="-1" role="dialog" aria-labelledby="deleteModelLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteModelLabel">Delete Area</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to delete {{deleteGreenArea?.repName}}?</p>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+          <button (click)="onDeleteGreenArea(deleteGreenArea.id)" class="btn btn-danger" data-dismiss="modal">Yes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Notification for no employees -->
+<div *ngIf="greenAreas?.length == 0" class="col-lg-12 col-md-12 col-xl-12">
+  <div class="alert alert-info" role="alert">
+    <h4 class="alert-heading">NO Areas!</h4>
+    <p>No Areas were found.</p>
+  </div>
+</div>

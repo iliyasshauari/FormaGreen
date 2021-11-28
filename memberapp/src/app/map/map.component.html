@@ -1,0 +1,13 @@
+
+<google-map height="750px"
+            width="100%"
+            [center]="center"
+            >
+
+  <map-marker
+    *ngFor="let greenArea of greenAreas"
+    [position]= " {lng: greenArea.lng,lat: greenArea.lat}"
+  >
+  </map-marker>
+</google-map>
+
